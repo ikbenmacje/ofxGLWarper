@@ -259,6 +259,14 @@ void ofxGLWarper::mouseDragged(ofMouseEventArgs &args){
 	}
     processMatrices();
 }
+
+//--------------------------------------------------------------
+void ofxGLWarper::checkMouse(float mX, float mY){
+    if(ofGetKeyPressed(OF_KEY_CONTROL) && cornersPoly.inside(mX,mY)){
+        toggleActive();
+    }
+}
+
 //--------------------------------------------------------------
 void ofxGLWarper::mousePressed(ofMouseEventArgs &args){
 	if(ofGetKeyPressed(OF_KEY_SHIFT) && cornersPoly.inside(args.x, args.y)){
@@ -444,3 +452,5 @@ ofxGLWarper::CornerLocation ofxGLWarper::getSelectedCornerLocation(){
 	ofxGLWarper::CornerLocation corner_loc = static_cast<ofxGLWarper::CornerLocation>(selectedCorner);
 	return corner_loc;
 }
+
+

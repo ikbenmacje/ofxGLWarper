@@ -83,6 +83,8 @@ public:
 
     void setCornerSensibility(float sensibility);
     float getCornerSensibility();
+   
+    void checkMouse(float mX, float mY);
 
     ofParameter<glm::vec2> corners[4];
 
