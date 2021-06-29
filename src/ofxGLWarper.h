@@ -83,6 +83,10 @@ public:
 
     void setCornerSensibility(float sensibility);
     float getCornerSensibility();
+   
+    void toggleActiveMouse(float mX, float mY);
+    void mouseDraggedReciever(float mX, float mY);
+    void mousePressedReceiver(float mX, float mY);
 
     ofParameter<glm::vec2> corners[4];
 

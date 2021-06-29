@@ -245,25 +245,41 @@ void ofxGLWarper::loadFromXml(ofXml &XML, const string& warperID){
 
 }
 //--------------------------------------------------------------
+void ofxGLWarper::toggleActiveMouse(float mX, float mY){
+    if(ofGetKeyPressed(OF_KEY_CONTROL) && cornersPoly.inside(mX,mY)){
+        toggleActive();
+    }
+}
+
+//--------------------------------------------------------------
 void ofxGLWarper::mouseDragged(ofMouseEventArgs &args){
+    mouseDraggedReciever(args.x,args.y);
+}
+
+void ofxGLWarper::mouseDraggedReciever(float mX, float mY){
 	if(!ofGetKeyPressed(OF_KEY_SHIFT) && bMoveAll){
 		bMoveAll = false;
 	}
 	if(bMoveAll){
-		moveAllCorners(args - mousePressPos);
-		mousePressPos = args;
+		moveAllCorners(glm::vec2(mX,mY) - mousePressPos);
+		mousePressPos = glm::vec2(mX,mY);
 	}else{
 	if(cornerIsSelected && selectedCorner >= 0){
-        corners[selectedCorner] = glm::vec2(args.x, args.y);
+        corners[selectedCorner] = glm::vec2(mX,mY);
     }
 	}
     processMatrices();
 }
+
 //--------------------------------------------------------------
 void ofxGLWarper::mousePressed(ofMouseEventArgs &args){
-	if(ofGetKeyPressed(OF_KEY_SHIFT) && cornersPoly.inside(args.x, args.y)){
+    mousePressedReceiver(args.x,args.y);
+}
+
+void ofxGLWarper::mousePressedReceiver(float mX, float mY){
+	if(ofGetKeyPressed(OF_KEY_SHIFT) && cornersPoly.inside(mX, mY)){
 		bMoveAll = true;
-		mousePressPos = args;
+		mousePressPos = glm::vec2(mX,mY);
 	}else{
 		bMoveAll = false;
     float smallestDist = sqrtf(ofGetWidth() * ofGetWidth() + ofGetHeight() * ofGetHeight());
@@ -272,8 +288,8 @@ void ofxGLWarper::mousePressed(ofMouseEventArgs &args){
 
     cornerIsSelected = false;
     for(int i = 0; i < 4; i++){
-        float distx = corners[i]->x - args.x;
-        float disty = corners[i]->y - args.y;
+        float distx = corners[i]->x - mX;
+        float disty = corners[i]->y - mY;
         float dist  = sqrtf( distx * distx + disty * disty);
         ofLogVerbose() << "mouse to corner dist: " << dist << endl;
         if(dist < smallestDist && dist < sensFactor ){
@@ -444,3 +460,5 @@ ofxGLWarper::CornerLocation ofxGLWarper::getSelectedCornerLocation(){
 	ofxGLWarper::CornerLocation corner_loc = static_cast<ofxGLWarper::CornerLocation>(selectedCorner);
 	return corner_loc;
 }
+
+
